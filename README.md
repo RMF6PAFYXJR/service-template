@@ -1,40 +1,109 @@
 # ⚙️ RKFFSW ASP.NET 9 Web API Template
 
-**Version 1.0**
-A clean and modern base template for building microservices using **ASP.NET Core 9**, **PostgreSQL**, **Redis**, and **Docker**.
+**Version 1.1**
+A clean and modern **ASP.NET 9 Web API template** built around **Clean Architecture** principles — serving as a foundation for all your backend microservices.
 
 ---
 
 ## 🚀 Overview
 
-This template serves as a **foundation for all my web API services**.
-It provides a ready-to-use, production-oriented setup with:
+This template provides a **scalable**, **modular**, and **testable** base for service-oriented APIs.
+It’s ready for production with:
 
-* ✅ Preconfigured **Swagger** (with API key support as example middleware)
-* ✅ **PostgreSQL** and **Redis** integration
-* ✅ Automatic and manual **EF Core migrations**
+* ✅ Preconfigured **Swagger** (with API Key authentication example)
+* ✅ Built-in **PostgreSQL** and **Redis** integration
+* ✅ Automatic **EF Core migrations**
 * ✅ Global **middleware pipeline**
-* ✅ Support for **NGINX reverse proxy** via `ForwardedHeaders`
-* ✅ Modular **extension-based startup** (clean `Program.cs`)
-* ✅ Ready-to-deploy **Docker** configuration
+* ✅ Modular extension-based startup (clean `Program.cs`)
+* ✅ Ready-to-deploy **Docker** & **NGINX reverse proxy** setup
+* ✅ Based on **Domain-Driven Design (DDD)** & **Use Case** patterns
 
 ---
 
 ## 🧩 Technologies
 
-| Component                   | Description                         |
-| --------------------------- | ----------------------------------- |
-| **.NET 9**                  | Core framework for the API          |
-| **PostgreSQL**              | Primary database                    |
-| **Redis**                   | Cache and session storage           |
-| **Entity Framework Core**   | ORM with automatic migrations       |
-| **Swagger / OpenAPI**       | Built-in API documentation          |
-| **Docker & Docker Compose** | Containerized environment           |
-| **Nginx-ready setup**       | Works behind a proxy out of the box |
+| Component                 | Description                     |
+| ------------------------- | ------------------------------- |
+| **.NET 9**                | Core framework for the API      |
+| **PostgreSQL**            | Primary database                |
+| **Redis**                 | Caching and data storage        |
+| **Entity Framework Core** | ORM with migrations             |
+| **Swagger / OpenAPI**     | API documentation and testing   |
+| **Docker & Compose**      | Containerized deployment        |
+| **Nginx-ready setup**     | Works seamlessly behind a proxy |
 
 ---
 
-## 📦 Usage
+## 🧠 Architecture Overview
+
+```
+          ┌──────────────────────────┐
+          │        Presentation       │
+          │ (Controllers, Middleware) │
+          └────────────┬──────────────┘
+                       │
+                       ▼
+          ┌──────────────────────────┐
+          │        Application        │
+          │ (UseCases, DTOs, Mappers) │
+          └────────────┬──────────────┘
+                       │
+                       ▼
+          ┌──────────────────────────┐
+          │          Domain           │
+          │ (Entities, Interfaces)    │
+          └────────────┬──────────────┘
+                       │
+                       ▼
+          ┌──────────────────────────┐
+          │      Infrastructure       │
+          │ (Repositories, Services,  │
+          │  DbContext, Email, Redis) │
+          └──────────────────────────┘
+```
+
+**Flow Example:**
+
+```
+Controller → UseCase → Service → Repository → Database
+```
+
+---
+
+## 🗂 Project Structure
+
+```
+📁 src/
+├─ 📘 Domain/
+│   ├─ Entities/
+│   ├─ Interfaces/
+│   └─ Common/
+│
+├─ ⚙️ Application/
+│   ├─ DTOs/
+│   ├─ UseCases/
+│   ├─ Mappers/
+│   └─ Validators/
+│
+├─ 🏗 Infrastructure/
+│   ├─ Persistence/
+│   │   ├─ AppDbContext.cs
+│   │   └─ Repositories/
+│   │   
+│   ├─ Services/
+│   └─ Extensions/
+│
+├─ 🌐 API/
+│   ├─ Controllers/
+│   ├─ Middleware/
+│   └─ Extensions/
+│
+└─ 🏁 Program.cs
+```
+
+---
+
+## 🧱 Usage
 
 ### 🛠 Create a new project from this template
 
@@ -43,19 +112,13 @@ dotnet new install ./
 dotnet new service_template -n MyNewService
 ```
 
-or if the template is published globally(not now):
-
-```bash
-dotnet new service_template -n InventoryService
-```
-
-### 🧱 Build and run
+### 🧰 Run with Docker
 
 ```bash
 docker compose up --build -d
 ```
 
-Your API will be available at:
+Your service will be available at:
 
 ```
 http://localhost:8080/swagger
@@ -63,49 +126,33 @@ http://localhost:8080/swagger
 
 ---
 
-## 🧠 Project Structure
+## ⚙️ Commands and Tools
 
-```
-📁 service_template/
-├─ 🧩 Extensions/
-│   ├─ ApplicationBuilderExtensions.cs
-│   ├─ ServiceCollectionExtensions.cs
-│   └─ SwaggerExtensions.cs ...
-│
-├─ 🧠 Middleware/
-│   ├─ ApiKeyMiddleware.cs
-│   └─ ExceptionMiddleware.cs ...
-│
-├─ 💾 Data/
-│   ├─ AppDbContext.cs
-│   └─ Migrations/
-│
-├─ 🧍 Controllers/
-│   └─ UserController.cs ...
-│
-├─ ⚙️ appsettings.json
-├─ 🐋 Dockerfile
-├─ 🐋 docker-compose.yml
-└─ 🏁 Program.cs
-```
+| Action               | Command                                    |
+| -------------------- | ------------------------------------------ |
+| Add migration        | `dotnet ef migrations add "MigrationName"` |
+| Apply migrations     | `dotnet ef database update`                |
+| Run Docker container | `docker compose up --build -d`             |
+| Create from template | `dotnet new service_template -n MyService` |
 
 ---
 
-## 🧰 Commands and tools
+## 🧩 Layer Summary
 
-| Action                   | Command                                    |
-| ------------------------ | ------------------------------------------ |
-| Add new migration        | `dotnet ef migrations add "MigrationName" or just use .bat file` |
-| Apply migrations         | `dotnet ef database update`                |
-| Run in Docker            | `docker compose up --build -d`             |
-| Regenerate from template | `dotnet new myservice -n ServiceName`      |
+| Layer              | Responsibility                                                 |
+| ------------------ | -------------------------------------------------------------- |
+| **Domain**         | Core entities and contracts (pure logic, no dependencies)      |
+| **Application**    | UseCases and DTOs that coordinate services                     |
+| **Infrastructure** | Implementations (repositories, external APIs, services)        |
+| **API**            | Entry point layer — controllers, middleware, swagger, DI setup |
 
 ---
 
 ## 💡 Notes
 
-* The template uses a **modular startup pattern** – all services, middlewares, and mappings are cleanly separated.
-* You can safely extend it with additional layers such as **CQRS**, **MediatR**, or **gRPC**.
+* Designed for **Clean Architecture** and **DDD** enthusiasts.
+* You can easily extend it with **CQRS**, **MediatR**, or **gRPC**.
+* Keeps dependencies flowing **inward** — outer layers depend on inner ones, never the reverse.
 
 ---
 
@@ -113,5 +160,3 @@ http://localhost:8080/swagger
 
 **RKFFSW**
 *“Built once, reused everywhere.”*
-
----

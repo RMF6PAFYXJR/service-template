@@ -30,6 +30,7 @@ public static class InfrastructureExtensions
     {
         services.AddDbContext<AppDbContext>(o =>
             o.UseNpgsql(config.GetConnectionString("Postgres")));
+        
         services.AddSingleton<IConnectionMultiplexer>(sp =>
             ConnectionMultiplexer.Connect(config["Redis:ConnectionString"] ?? "localhost:6379"));
 

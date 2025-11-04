@@ -5,7 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddForwardedHeadersSupport()
     .AddInfrastructure(builder.Configuration)
-    .AddSwaggerDocumentation();
+    .AddApplication()
+    .AddSwaggerDocumentation()
+    .AddControllers();
 
 var app = builder.Build();
 

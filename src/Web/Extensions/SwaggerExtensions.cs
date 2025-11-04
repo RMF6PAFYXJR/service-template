@@ -12,6 +12,7 @@ public static class SwaggerExtensions
     /// <returns>The same <see cref="IServiceCollection"/> for fluent chaining.</returns>
     public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
     {
+        services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo

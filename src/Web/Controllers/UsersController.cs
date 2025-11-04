@@ -5,20 +5,15 @@ using service_template.Application.UseCases;
 namespace service_template.Web.Controllers;
 
 [ApiController]
-[Route("api/users")]
-public class UserController : ControllerBase
+[Route("api/[controller]")]
+public class UserController(CreateUserUseCase useCase) : ControllerBase
 {
-    private readonly CreateUserUseCase _useCase;
-
-    public UserController(CreateUserUseCase useCase)
-    {
-        _useCase = useCase;
-    }
-
-    [HttpPost]
+    [HttpPost("create")] // добавляем конкретный сегмент маршрута
+    [ProducesResponseType(typeof(CreateUserRequest), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] CreateUserRequest request)
     {
-        await _useCase.ExecuteAsync(request.Username, request.Email);
+        await useCase.ExecuteAsync(request.Username, request.Email);
         return Ok(new { message = "User created successfully" });
     }
 }

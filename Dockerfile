@@ -1,17 +1,24 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+﻿# --- Base runtime ---
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 WORKDIR /app
 EXPOSE 8080
 
+# --- Build stage ---
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /src
-COPY ["service_template.csproj", "./"]
-RUN dotnet restore "service_template.csproj"
-COPY . .
-RUN dotnet publish "service_template.csproj" -c Release -o /app/publish
+COPY ServiceTemplate.sln ./
+COPY src/ ./src
+COPY tests/ ./tests
 
+RUN dotnet restore ServiceTemplate.sln
 
+RUN dotnet publish src/ServiceTemplate.Web/ServiceTemplate.Web.csproj -c Release -o /app/publish
+
+# --- Runtime stage ---
 FROM base AS final
 WORKDIR /app
+
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "service_template.dll"]
+
+ENTRYPOINT ["dotnet", "ServiceTemplate.Web.dll"]

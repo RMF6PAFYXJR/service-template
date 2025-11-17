@@ -1,4 +1,6 @@
-﻿namespace ServiceTemplate.Web.Middlewares;
+﻿using ServiceTemplate.Web.Extensions;
+
+namespace ServiceTemplate.Web.Middlewares;
 
 public class ApiKeyMiddleware(RequestDelegate next, IConfiguration config)
 {
@@ -9,7 +11,7 @@ public class ApiKeyMiddleware(RequestDelegate next, IConfiguration config)
     {
 
         var path = context.Request.Path.Value?.ToLowerInvariant() ?? string.Empty;
-        if (IsSwaggerOrHealthCheck(path))
+        if (SwaggerExtensions.IsSwaggerPath(path, config))
         {
             await next(context);
             return;
@@ -25,10 +27,5 @@ public class ApiKeyMiddleware(RequestDelegate next, IConfiguration config)
         }
 
         await next(context);
-    }
-
-    private static bool IsSwaggerOrHealthCheck(string path)
-    {
-        return path.StartsWith("/swagger") || path.StartsWith("/health");
     }
 }

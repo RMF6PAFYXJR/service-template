@@ -8,6 +8,7 @@
       - ConnectionStrings__Postgres=Host=postgres;Port=5432;Database=database;Username=postgres;Password=postgres
       - Redis__ConnectionString=redis:6379
       - Swagger__ApiKey=super-secret-key
+      - Swagger__RoutePrefix=/docs
     depends_on:
       postgres:
         condition: service_healthy
@@ -17,7 +18,7 @@
      - backend
 
   postgres:
-    image: postgres:16-alpine
+    image: postgres:18.1-alpine3.22
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

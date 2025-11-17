@@ -15,7 +15,7 @@ app
     .UseForwardedHeaders()
     .ApplyMigrations()
     .UseGlobalMiddlewares()
-    .UseSwaggerDocumentation();
+    .UseSwaggerDocumentation(builder.Configuration);
 
 app
     .MapHealthEndpoints()
